@@ -1,0 +1,12 @@
+2025-06-23 20:08:18,202 | INFO     | currency_utils | Fetching exchange rate: USD -> EUR
+2025-06-23 20:08:18,440 | INFO     | currency_utils | Rate found: 1 USD = 0.8685 EUR
+2025-06-23 20:08:18,441 | INFO     | currency_utils | Converted amount: 8685.00 EUR
+2025-06-25 18:53:53,242 | ERROR    | __main__ | Division by zero occurred!
+Traceback (most recent call last):
+  File "C:\Users\tnarl\CurrencyConverter\main.py", line 16, in <module>
+    1 / 0
+    ~~^~~
+ZeroDivisionError: division by zero
+2025-06-25 19:01:58,852 | ERROR    | __main__ | Invalid amount entered.
+2025-06-26 02:15:23,289 | INFO     | currency_utils | Fetching exchange rate: USD -> EUR
+2025-06-26 02:15:23,516 | INFO     | currency_utils | Rate found: 1 USD = 0.8587 EUR
