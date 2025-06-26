@@ -6,7 +6,7 @@ from config import API_KEY
 #This is used to create a logger specific to this module (currency_utils.py).
 logger = logging.getLogger(__name__)
 
-def get_exchange_rate(from_currency, to_currency):
+def get_exchange_rate(api_key, from_currency, to_currency):
     url = f"https://v6.exchangerate-api.com/v6/{API_KEY}/pair/{from_currency}/{to_currency}"
     logger.info(f"Fetching exchange rate: {from_currency} -> {to_currency}")
 
@@ -27,7 +27,7 @@ def get_exchange_rate(from_currency, to_currency):
         logger.error(f"API error: {data.get('error-type', 'Unknown error')}")
         return None
 
-def convert_currency(amount, from_currency, to_currency):
+def convert_currency(api_key, amount, from_currency, to_currency):
     logger.debug(f"Converting {amount} {from_currency} to {to_currency}")
     rate = get_exchange_rate(from_currency, to_currency)
 
