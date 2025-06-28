@@ -1,3 +1,38 @@
+# 🔐 Environment files (NEVER commit these)
 .env
+.env.*
+
+# 🐍 Python build artifacts
 __pycache__/
-*.pyc
+*.py[cod]
+*.pyo
+*.pyd
+
+# 📦 Virtual environments
+.venv/
+venv/
+ENV/
+env/
+
+# 🧪 Test coverage
+.coverage
+htmlcov/
+.tox/
+.pytest_cache/
+
+# 🛠 IDE/editor configs
+.idea/
+.vscode/
+*.swp
+
+# 📄 Log and debug files
+*.log
+logs/
+
+# 📦 Packaging files
+*.egg-info/
+dist/
+build/
+
+# 🗃 Other
+.DS_Store

@@ -10,24 +10,33 @@ using the Alpha Vantage API.
 
 import os
 import unittest
+
 from currency_utils import get_exchange_rate
 
-"""
-This test class inherits from `unittest.TestCase`, the base class for all test cases.
-By naming the class with a `Test` prefix, it can be automatically discovered and run by the unittest framework.
-"""
-class TestCurrencyUtilsIntegration(unittest.TestCase):
+"""This test class inherits from `unittest.TestCase`, the base class for all test cases.
+By naming the class with a `Test` prefix, it's automatically discovered
+and run by the unittest framework."""
 
+
+class TestCurrencyUtilsIntegration(unittest.TestCase):
     def test_live_get_exchange_rate(self):
         # Check if integration tests are enabled via an environment variable
         if os.getenv("RUN_INTEGRATION_TESTS") != "1":
-            print("⚠️  Skipping integration test: Set RUN_INTEGRATION_TESTS=1 to enable.")
-            self.skipTest("Integration test skipped. Set RUN_INTEGRATION_TESTS=1 to run.")
+            print(
+                "⚠️  Skipping integration test: "
+                "Set RUN_INTEGRATION_TESTS=1 to enable."
+            )
+            self.skipTest(
+                "Integration test skipped. " "Set RUN_INTEGRATION_TESTS=1 to run."
+            )
 
         # Check if the API key is set in the environment
         api_key = os.getenv("EXCHANGE_API_KEY")
         if not api_key:
-            print("⚠️  Skipping test: Set EXCHANGE_API_KEY in environment to run this test.")
+            print(
+                "⚠️  Skipping test: Set EXCHANGE_API_KEY in environment "
+                "to run this test."
+            )
             self.skipTest("Missing API key.")
 
         # Perform the actual API call
@@ -37,11 +46,12 @@ class TestCurrencyUtilsIntegration(unittest.TestCase):
         self.assertIsInstance(rate, float)
 
         # Assert that the exchange rate is a positive number (> 0)
-        self.assertGreater(rate, 0)  # Exchange rates should logically be greater than zero
+        # Exchange rates should logically be greater than 0.
+        self.assertGreater(rate, 0)
 
-"""
-As with unit tests, this integration test will automatically run 
-when the script is executed directly — *if* conditions allow it.
-"""
+
+"""As with unit tests, this integration test will automatically run
+when the script is executed directly — *if* conditions allow it."""
+
 if __name__ == "__main__":
     unittest.main()

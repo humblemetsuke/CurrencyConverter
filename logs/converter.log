@@ -10,3 +10,17 @@ ZeroDivisionError: division by zero
 2025-06-25 19:01:58,852 | ERROR    | __main__ | Invalid amount entered.
 2025-06-26 02:15:23,289 | INFO     | currency_utils | Fetching exchange rate: USD -> EUR
 2025-06-26 02:15:23,516 | INFO     | currency_utils | Rate found: 1 USD = 0.8587 EUR
+2025-06-27 09:10:36,057 | INFO     | currency_utils | Fetching exchange rate: USD -> GBP
+2025-06-27 09:10:36,279 | INFO     | currency_utils | Rate found: 1 USD = 0.7287 GBP
+2025-06-27 09:10:36,280 | INFO     | currency_utils | Converted amount: 7287.00 GBP
+2025-06-27 09:19:22,342 | INFO     | currency_utils | Fetching exchange rate: USD -> EUR
+2025-06-27 09:19:22,523 | ERROR    | currency_utils | Failed to fetch or parse exchange rate data.
+Traceback (most recent call last):
+  File "C:\Users\tnarl\CurrencyConverter\currency_utils.py", line 13, in get_exchange_rate
+    response.raise_for_status()  # Raises HTTPError for bad responses
+    ~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\tnarl\CurrencyConverter\.venv\Lib\site-packages\requests\models.py", line 1026, in raise_for_status
+    raise HTTPError(http_error_msg, response=self)
+requests.exceptions.HTTPError: 400 Client Error: Bad Request for url: https://v6.exchangerate-api.com/v6/40263a55e1f1dbc7014ba0b7/pair/USDD/EUR
+2025-06-27 09:19:23,046 | WARNING  | currency_utils | Conversion failed due to missing exchange rate.
+2025-06-27 17:49:15,032 | ERROR    | __main__ | Invalid amount entered.

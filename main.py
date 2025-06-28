@@ -1,43 +1,45 @@
-import logging
+from config import API_KEY
 from currency_utils import convert_currency
-from notifications import DiscordWebhookHandler
+from logger_setup import setup_logger
+from validators import get_currency_input, get_valid_amount
 
-logger = logging.getLogger(__name__)
-logger.setLevel(logging.ERROR)
-
-
-discord_handler = DiscordWebhookHandler("YOUR_DISCORD_WEBHOOK_URL")
-discord_handler.setFormatter(logging.Formatter('%(asctime)s - %(levelname)s - %(message)s'))
-
-logger.addHandler(discord_handler)
-
-# Sample error to verify that the discord notification works as intended.
-# try:
-#   1 / 0
-# except ZeroDivisionError:
-#    logger.exception("Division by zero occurred!")
-
+logger = setup_logger()
 
 
 def main():
     print("=== Currency Converter ===")
-    try:
-        amount = float(input("Enter amount: "))
-    except ValueError:
-        logger.error("Invalid amount entered.")
-        print("Please enter a valid number.")
-        return
-    try:
-        from_currency = input("From currency (e.g. USD): ").upper()
-        to_currency = input("To currency (e.g. EUR): ").upper()
 
-        converted = convert_currency(amount, from_currency, to_currency)
+    amount = get_valid_amount()
+    if amount is None:
+        return
+
+    from_currency = get_currency_input("From")
+    if not from_currency:
+        return
+
+    to_currency = get_currency_input("To")
+    if not to_currency:
+        return
+
+    try:
+        converted = convert_currency(API_KEY, amount, from_currency, to_currency)
         if converted is not None:
-            print(f"{amount} {from_currency} = {converted:.2f} {to_currency}")
+            print(f"\n💱 {amount:.2f} {from_currency} = {converted:.2f} {to_currency}")
+            logger.info(
+                f"Conversion: {amount:.2f} {from_currency} "
+                f"→ {converted:.2f} {to_currency}"
+            )
         else:
-            print("Conversion failed.")
-    except Exception as e:
+            print("⚠️ Conversion failed. Please check your API key or currency codes.")
+    except Exception:
         logger.exception("An error occurred during the conversion.")
+        print("❌ An unexpected error occurred. Please check logs.")
+
+    # Optional: Retry
+    retry = input("\nTry another conversion? (y/n): ").strip().lower()
+    if retry == "y":
+        print()
+        main()
 
 
 if __name__ == "__main__":
