@@ -1,0 +1,18 @@
+
+
+[flake8]
+
+# Comments must be above, not inline with settings.
+
+# Set max line length to 88 characters, which is the default for Black
+max-line-length = 88
+
+# Any rules that conflict with Black's default formatting are ignored.
+# E203 ignores whitespace before : as Black deals with this differently.
+# W503 ignore a linebreak before binary operator as Black deals with this differently.
+extend-ignore = E203, W503
+
+# Directories after the = are all excluded from the linting proceedings.
+# These are all common files that do not require to be linted.
+exclude = .git, __pycache__, build, dist, .venv
+

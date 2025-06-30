@@ -1,0 +1,34 @@
+# 🔐 Environment files (NEVER commit these)
+.env
+.env.*
+
+# 💻 IDE settings
+.idea/
+*.iml
+workspace.xml
+shelf/
+
+# 🐍 Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# 🚫 Virtual environments
+.venv/
+venv/
+ENV/
+env/
+
+# 📦 Packaging artifacts
+*.egg-info/
+dist/
+build/
+
+# 📄 Logs
+*.log
+logs/
+
+# 📂 OS-specific
+.DS_Store
+Thumbs.db
