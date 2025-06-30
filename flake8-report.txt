@@ -1,4 +1,0 @@
-.\config.py:20:89: E501 line too long (90 > 88 characters)
-.\currency_utils.py:9:89: E501 line too long (92 > 88 characters)
-.\flake8_run.py:12:89: E501 line too long (90 > 88 characters)
-.\validators.py:37:89: E501 line too long (91 > 88 characters)

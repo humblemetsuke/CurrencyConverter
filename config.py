@@ -1,10 +1,8 @@
 import logging
 import os
 from logging import StreamHandler
-
 from colorlog import ColoredFormatter
 from dotenv import load_dotenv
-
 from notifications import DiscordWebhookHandler
 
 load_dotenv()

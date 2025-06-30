@@ -2,6 +2,7 @@ requests~=2.32.4
 python-dotenv~=1.1.0
 logging~=0.4.9.6
 colorlog~=6.9.0
+colorama
 black
 flake8
 pre-commit
