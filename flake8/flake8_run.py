@@ -1,3 +1,11 @@
+"""subprocess is used to run shell commands.
+sys exit the script, or gets the Python execution script.
+Path from pathlib: Safer file/directory path handling.
+datetime is used to generate timestamped filenames.
+colorarama is used for adding colourisation to the terminal output.
+defaultdict is a dictionary that auto-initializes values."""
+
+
 import subprocess
 import sys
 from pathlib import Path
@@ -40,6 +48,9 @@ def ensure_flake8_installed():
                              + Style.RESET_ALL)
             sys.exit(1)
 
+"""This function is responsible for outputting the file. 
+This function includes different return codes, to help distinguish each error.
+ This is intended to assist with automation reports."""
 def run_flake8(output_dir="reports", output_file="flake8-report.txt"):
     print(Fore.CYAN + "🔍 Running flake8 linting..." + Style.RESET_ALL)
     try:
@@ -58,7 +69,7 @@ def run_flake8(output_dir="reports", output_file="flake8-report.txt"):
                 check=False,
                 timeout=TIMEOUT_IN_SECONDS
             )
-
+        # If return code is 0 and report is empty: no issues.
         if result.returncode == 0:
             if output_path.stat().st_size == 0:
                 print(Fore.GREEN + f"✅ No issues found. "
@@ -75,6 +86,7 @@ def run_flake8(output_dir="reports", output_file="flake8-report.txt"):
             print(Fore.RED + f"❌ flake8 failed with exit code {result.returncode}. See: {output_path}" + Style.RESET_ALL)
 
         return result.returncode, output_path
+
 
     except subprocess.TimeoutExpired:
         print(Fore.RED + "❌ flake8 timed out." + Style.RESET_ALL)

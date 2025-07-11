@@ -83,5 +83,6 @@ def summarise_flake8_report(file_path):
 if __name__ == "__main__":
     latest_report = get_latest_flake8_report()
     if latest_report:
-        summarise_flake8_report()
-    summarise_flake8_report("reports/flake8_report.txt")
+        summarise_flake8_report(latest_report)
+    else:
+        print("❌ No valid flake8 report found.")
