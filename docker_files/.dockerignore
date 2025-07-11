@@ -1,0 +1,61 @@
+# Byte-compiled / cache files
+# This category is for Python artifacts that would bloat and pollute our Docker image.
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pyc
+
+
+# Virtual environments
+# We avoid bundling virtual enviroments with our Docker image because they are built
+# and intended for our host OS. Docker on the otherhand, typically makes use of
+# Linux based containers and the binaries are not compatible, thereby breaking the
+# container. In addition, they add unnecessary and avoidable bloat to the Dockerfile.
+# The whole premise of a virtual environment provides a self-contained, isolated environment.
+# Docker already does this, so no need for a venv inside Docker!
+
+venv/
+env/
+../.venv/
+
+# Editor/IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Environment variables and secrets
+# .env and .env.* are added to .dockerignore to prevent API secret keys
+# and other sensitive data from being unnecessarily leaked when dockerized.
+.env
+.env.*
+
+# Tests and coverage
+tests/
+*.cover
+.coverage
+coverage.*
+htmlcov/
+
+# Docker artifacts
+# Dockerfile is included here to avoid duplicating it
+# into an image if not needed at runtime.
+Dockerfile
+.dockerignore
+
+# Logs
+*.log
+
+# Git
+.git/
+.gitignore
+
+# System files
+.DS_Store
+Thumbs.db
+
+# OS/Package lock
+Pipfile
+Pipfile.lock
+poetry.lock
