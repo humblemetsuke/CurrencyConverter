@@ -7,7 +7,7 @@ def get_latest_flake8_report(output_dir="reports", base_name="flake8-report"):
     report_path = Path(output_dir)
     # Use glob to match files like flake8-report_*.txt
     # The script for generating flake8 reports adds timestamps to the name.
-    files =list(report_path.glob(f"{base_name}_*.txt"))
+    files = list(report_path.glob(f"{base_name}_*.txt"))
     if not files:
         print(f"No flake8 report files found in {output_dir}")
         return None
@@ -61,7 +61,7 @@ def summarise_flake8_report(file_path):
     print("\n📌 Error Summary by Code:")
 
     """Loops through the error codes sorted by frequency, descending.
-    error_counts.items() gives all key and value pairs 
+    error_counts.items() gives all key and value pairs
     in the error_counts dictionary.
     sorted(..., key=lambda x: -x[1]) sorts the (code, count) in descending order
     [1] refers to the 2nd item in each pair, which is the count.

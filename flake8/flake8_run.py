@@ -3,139 +3,146 @@ import sys
 from pathlib import Path
 from datetime import datetime
 from colorama import init, Fore, Style
-"""colorama.init() at the top for cross-platform color support.
-Fore.GREEN for success messages.
-Fore.YELLOW for warnings (linting issues).
-Fore.RED for errors and exceptions.
-Resetting color with Style.RESET_ALL after each print to avoid bleeding colors.
-Comprehensive exception handling with colored feedback.
-"""
+from collections import defaultdict
+
 init()
 
-TIMEOUT_IN_SECONDS = 40 # 40 second timeout
+TIMEOUT_IN_SECONDS = 40  # Timeout for flake8
 
 def ensure_flake8_installed():
-    """Checks if flake8 is available, and optionally installs it if missing."""
     try:
-        subprocess.run(["flake8", "--version"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, check=True)
+        subprocess.run(["flake8", "--version"],
+                       stdout=subprocess.DEVNULL,
+                       stderr=subprocess.DEVNULL,
+                       check=True)
     except FileNotFoundError:
-        print(Fore.RED + f"❌ flake8 is not installed." + Style.RESET_ALL)
-        user_input = input(Fore.CYAN +"👉 Would you like to install flake8 now? (y/n): " + Style.RESET_ALL).strip().lower()
+        print(Fore.RED + "❌ flake8 is not installed." + Style.RESET_ALL)
+        user_input = input(Fore.CYAN + "👉 Install flake8 now? (y/n): "
+                           + Style.RESET_ALL).strip().lower()
         if user_input == 'y':
             try:
-                subprocess.run([sys.executable, "-m", "pip", "install", "flake8"], check=True)
-                print(Fore.GREEN +f"✅ flake8 successfully installed." + Style.RESET_ALL)
+                subprocess.run([sys.executable, "-m",
+                                "pip",
+                                "install",
+                                "flake8"],
+                               check=True)
+                print(Fore.GREEN + "✅ flake8 installed."
+                                 + Style.RESET_ALL)
             except subprocess.CalledProcessError:
-                print(Fore.RED + f"❌ Failed to install flake8. Please install it manually: pip install flake8" + Style.RESET_ALL)
+                print(Fore.RED + "❌ Failed to install flake8. "
+                                 "Install manually with: "
+                                 "`pip install flake8`."
+                                 + Style.RESET_ALL)
                 sys.exit(1)
         else:
-            print(Fore.RED + "❌ flake8 is required. Exiting." + Style.RESET_ALL)
+            print(Fore.RED + "❌ flake8 is required. "
+                             "Exiting."
+                             + Style.RESET_ALL)
             sys.exit(1)
 
-
-
-
 def run_flake8(output_dir="reports", output_file="flake8-report.txt"):
-    """output_dir: the folder where the report will be saved (default is "reports").
-    output_file: the filename of the flake8 report (default is "flake8-report.txt").
-    """
-
-    """
-    run_flake8() returns an int exit code representing the flake8 result or error condition.
-    The main script exits with that code, so it can be used directly in CI pipelines or other automation tools.
-    I added custom return codes for various error conditions to differentiate issues beyond just flake8 exit codes.
-    """
-
     print(Fore.CYAN + "🔍 Running flake8 linting..." + Style.RESET_ALL)
     try:
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        # Create the directory if it doesn't exist (including parents)
         output_dir_path = Path(output_dir)
-        # Creates the folder (and any missing parent folders).
-        # Doesn't raise an error if the folder already exists.
         output_dir_path.mkdir(parents=True, exist_ok=True)
         base = Path(output_file).stem
         output_filename = f"{base}_{timestamp}.txt"
-
-        # Construct full output file path inside the directory
         output_path = output_dir_path / output_filename
 
-        """Open the file for writing AFTER creating the directory.
-        The with block ensures that the file is properly closed after usage.
-        """
-
         with output_path.open("w") as f:
-            """Run flake8, redirect stdout and stderr to the file
-            check=False: don’t raise an exception 
-            even if flake8 returns a non-zero exit code."""
             result = subprocess.run(
-            ["flake8"],
-            stdout=f,
-            stderr=subprocess.STDOUT,
-            check=False,
-            timeout = TIMEOUT_IN_SECONDS
+                ["flake8"],
+                stdout=f,
+                stderr=subprocess.STDOUT,
+                check=False,
+                timeout=TIMEOUT_IN_SECONDS
             )
 
-        # Check the exit code and print status
         if result.returncode == 0:
-
             if output_path.stat().st_size == 0:
-                print(Fore.GREEN + f"✅ flake8 finished with no issues. "
-                      f"Report is empty, this is normal: {output_path}."+ Style.RESET_ALL)
+                print(Fore.GREEN + f"✅ No issues found. "
+                                   f"Empty report saved: "
+                                   f"{output_path}"
+                                   + Style.RESET_ALL)
             else:
-                print(Fore.GREEN + f"✅ flake8 finished with no issues. "
-                      f"Report saved to: {output_path}." + Style.RESET_ALL)
-
+                print(Fore.GREEN + f"✅ flake8 finished successfully. "
+                                   f"Report saved: {output_path}"
+                                   + Style.RESET_ALL)
         elif result.returncode == 1:
-            print(Fore.YELLOW + f"⚠️ flake8 has finished with linting issues. See {output_path}"
-                  f"for further details." + Style.RESET_ALL)
+            print(Fore.YELLOW + f"⚠️ flake8 found issues. See report: {output_path}" + Style.RESET_ALL)
         else:
-            print(Fore.RED + f"❌ flake8 failed (exit code {result.returncode}).")
-            print(f"    Check {output_path} for possible runtime errors or misconfigurations." + Style.RESET_ALL)
+            print(Fore.RED + f"❌ flake8 failed with exit code {result.returncode}. See: {output_path}" + Style.RESET_ALL)
+
+        return result.returncode, output_path
 
     except subprocess.TimeoutExpired:
-        print(Fore.RED + f"❌ flake8 timed out after {TIMEOUT_IN_SECONDS} seconds. Process was terminated." + Style.RESET_ALL)
-        return 2
+        print(Fore.RED + "❌ flake8 timed out." + Style.RESET_ALL)
+        return 2, None
     except FileNotFoundError:
-        """This happens if the 'flake8' executable is not found. 
-        This will because flake8 is not installed OR
-        not found within the system PATH."""
-        print(Fore.RED + f"❌ Error: 'flake8' is not installed or not found in your PATH." + Style.RESET_ALL)
-        return 3
+        print(Fore.RED + "❌ flake8 not found in PATH." + Style.RESET_ALL)
+        return 3, None
     except PermissionError:
-        """Happens if the script doesn't have write permission for the directory
-        or file"""
-        print(Fore.RED + f"❌ Error: Permission denied when writing to {output_path}." + Style.RESET_ALL)
-        return 4
-    except IsADirectoryError: #invoked if a folder instead of file is found.
+        print(Fore.RED + f"❌ Permission denied when writing to {output_path}" + Style.RESET_ALL)
+        return 4, None
+    except IsADirectoryError:
         print(Fore.RED + f"❌ Expected a file but got a directory: {output_path}" + Style.RESET_ALL)
-        return 5
+        return 5, None
     except NotADirectoryError:
-        print(Fore.RED + f"❌ Part of the specified path is not a directory: {output_dir}" + Style.RESET_ALL)
-        return 6
-    except OSError as e: #Catch-all for general system-related errors
-        # (e.g., disk full, invalid filename, I/O failure).
+        print(Fore.RED + f"❌ Part of path is not a directory: {output_dir}" + Style.RESET_ALL)
+        return 6, None
+    except OSError as e:
         if "No space left" in str(e):
-            print(Fore.RED + "❌ Disk is full. Unable to write report." + Style.RESET_ALL)
+            print(Fore.RED + "❌ Disk is full. Cannot write report." + Style.RESET_ALL)
         else:
             print(Fore.RED + f"❌ OS error: {e}" + Style.RESET_ALL)
-        return 7
+        return 7, None
     except KeyboardInterrupt:
-        # Gracefully exits if the user presses Ctrl+C during the process.
-        print(Fore.RED + f"❌ Process interrupted by user (Ctrl+C)." + Style.RESET_ALL)
-        return 8
+        print(Fore.RED + "❌ Process interrupted by user (Ctrl+C)." + Style.RESET_ALL)
+        return 8, None
     except Exception as e:
-        # Catches any other unanticipated exceptions
-        # and prints the exception type and message.
         print(Fore.RED + f"❌ Unexpected error: {type(e).__name__}: {e}" + Style.RESET_ALL)
-        return 9
+        return 9, None
+
+def summarise_flake8_report(file_path):
+    error_counts = defaultdict(int)
+    file_errors = defaultdict(list)
+
+    try:
+        with open(file_path, "r", encoding="utf-8") as f:
+            for line in f:
+                line = line.strip()
+                if not line:
+                    continue
+                parts = line.split(":")
+                if len(parts) < 4:
+                    continue
+                filename = parts[0].strip()
+                code = parts[3].strip().split()[0]
+                error_counts[code] += 1
+                file_errors[filename].append(code)
+    except Exception as e:
+        print(f"❌ Failed to parse report: {e}")
+        return
+
+    print("\n📌 Error Summary by Code:")
+    for code, count in sorted(error_counts.items(), key=lambda x: -x[1]):
+        print(f"{code}: {count} occurrences")
+
+    print("\n📁 Top Files with Most Errors:")
+    for file, codes in sorted(file_errors.items(), key=lambda x: -len(x[1]))[:10]:
+        print(f"{file}: {len(codes)} issues")
 
 def main():
     ensure_flake8_installed()
-    exit_code = run_flake8()
-    sys.exit(exit_code)
+    exit_code, report_path = run_flake8()
+
+    if report_path and Path(report_path).exists():
+        summarise_flake8_report(report_path)
+    else:
+        print("⚠️ No report available to summarize.")
+
+    sys.exit(exit_code if exit_code is not None else 1)
 
 if __name__ == "__main__":
     main()
-
-
