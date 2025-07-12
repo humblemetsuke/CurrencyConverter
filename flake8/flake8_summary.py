@@ -1,5 +1,7 @@
 from collections import defaultdict
 from pathlib import Path
+import matplotlib.pyplot as plt
+from charts import plot_error_code_chart, plot_top_files_chart
 
 
 def get_latest_flake8_report(output_dir="reports", base_name="flake8-report"):
@@ -78,6 +80,8 @@ def summarise_flake8_report(file_path):
     sorted_files = sorted(file_errors.items(), key=lambda x: -len(x[1]))
     for file, codes in sorted_files[:10]:  # Top 10 files
         print(f"{file}: {len(codes)} issues")
+    plot_error_code_chart(error_counts)
+    plot_top_files_chart(file_errors)
 
 
 if __name__ == "__main__":
