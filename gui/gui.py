@@ -32,6 +32,12 @@ from valid_currencies import valid_currencies_dict
 # used to fetch from tuple of currencies to populate
 # the dropdown menu in the GUI.
 
+class ConversionWorker(QThread):
+
+    finished = pyqtSignal(float)
+    error = pyqtSignal(str)
+
+
 
 """we have set a Fixed Size of 300 by 200 pixels
 The size is fixed, and not resizeable at this time. """

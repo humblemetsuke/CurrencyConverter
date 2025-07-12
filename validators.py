@@ -1,3 +1,4 @@
+
 from data.valid_currencies import valid_currencies_dict
 from logger_setup import setup_logger
 

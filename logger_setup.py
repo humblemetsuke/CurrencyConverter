@@ -7,6 +7,9 @@ import os
 # Imports a custom logging handler that sends logs to a Discord webhook.
 from notifications import DiscordWebhookHandler
 
+from dotenv import load_dotenv
+load_dotenv() # Loads variables from .env into os.environment
+
 
 # === Logger Setup ===
 
@@ -15,7 +18,6 @@ def setup_logger() -> logging.Logger:
     then defaults to an empty string. The .strip() method is used for hygiene,
     removing any leading AND trailing whitespaces.
     """
-
     webhook_url = os.getenv("DISCORD_WEBHOOK_URL", "").strip()
     if len(webhook_url) < 60:  # Further hygiene check, sets an arbitrary threshold
         # for the minimum length of webhook url.
