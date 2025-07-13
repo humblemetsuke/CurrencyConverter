@@ -23,14 +23,15 @@ from PyQt6.QtWidgets import (
     QApplication, QWidget, QLabel, QLineEdit, QPushButton,
     QVBoxLayout, QHBoxLayout, QMessageBox, QComboBox
 )
-from PyQt6.QtCore import Qt
+from PyQt6.QtCore import Qt, QThread, pyqtSignal
 from PyQt6.QtGui import QDoubleValidator
-from currency_utils import convert_currency # imports custom logic of functions from currency_utils
+from currency_utils import convert_currency  # imports custom logic of functions from currency_utils
 from config import API_KEY
 from PyQt6.QtGui import QCursor
 from valid_currencies import valid_currencies_dict
 # used to fetch from tuple of currencies to populate
 # the dropdown menu in the GUI.
+
 
 class ConversionWorker(QThread):
 
@@ -38,10 +39,12 @@ class ConversionWorker(QThread):
     error = pyqtSignal(str)
 
 
-
 """we have set a Fixed Size of 300 by 200 pixels
 The size is fixed, and not resizeable at this time. """
+
+
 class CurrencyConverterGUI(QWidget):
+
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Currency Converter")
@@ -52,9 +55,10 @@ class CurrencyConverterGUI(QWidget):
         self.amount_input = QLineEdit()
         self.amount_input.setPlaceholderText("Enter amount (positive number)")
 
-        """Validator is used to ensure that the legal range of values entered by a user
-        are between (but greater than 0.0) and 1 x 10^ 15. The 2 is used to denote 
-        2 decimal places. These are intended as data input sanitation methods.
+        """Validator is used to ensure that the legal range of values
+        entered by a user are between (but greater than 0.0) and 1 x 10^ 15.
+        The 2 is used to denote 2 decimal places.
+        These are intended as data input sanitation methods.
         """
         validator = QDoubleValidator(0.0, 1e15, 2)
         validator.setNotation(QDoubleValidator.Notation.StandardNotation)
@@ -64,17 +68,17 @@ class CurrencyConverterGUI(QWidget):
         """Label "From Currency:.
 Dropdown combo box for selecting the currency to convert from.
 Populates combo box with the valid currency codes imported earlier.
-Sets the default selected currency to the second item (index 1) 
+Sets the default selected currency to the second item (index 1)
 to avoid it being the same as "from" by default.
 
 """
         self.from_label = QLabel("From Currency:")
         self.from_combo = QComboBox()
-        self.from_combo.addItems(VALID_CURRENCIES)
+        self.from_combo.addItems(valid_currencies_dict)
 
         self.to_label = QLabel("To Currency:")
         self.to_combo = QComboBox()
-        self.to_combo.addItems(VALID_CURRENCIES)
+        self.to_combo.addItems(valid_currencies_dict)
         self.to_combo.setCurrentIndex(1)
 
         # Convert Button

@@ -28,6 +28,18 @@ DISCORD_WEBHOOK_URL = os.getenv("DISCORD_WEBHOOK_URL", "").strip()
 # Ensure logs directory exists before file handlers use it
 os.makedirs("logs", exist_ok=True)
 
+# ─────────────────────────────────────────────────────────────
+# JSON Formatter for structured logging
+# ─────────────────────────────────────────────────────────────
+
+
+class JsonFormatter(logging.Formatter):
+    def format(self, record):
+        log_record = {
+            "timestamp": self.formatTime(record, self.datefmt),
+            "level": record.levelname,
+        }
+
 
 # -------------------------------------------
 # Optional colorlog integration:
@@ -56,7 +68,6 @@ try:
             "CRITICAL": "bold_red",
     },
 )
-
 except ImportError:
     print("Colorlog not found. Using basic formatter instead.")
     color_formatter = logging.Formatter(
@@ -70,6 +81,7 @@ file_formatter = logging.Formatter(
 # ─────────────────────────────────────────────────────────────
 # Optional Discord Webhook Handler
 # ─────────────────────────────────────────────────────────────
+
 
 def get_discord_handler(log_level=logging.ERROR) -> logging.Handler | None:
     """
@@ -103,7 +115,10 @@ def get_discord_handler(log_level=logging.ERROR) -> logging.Handler | None:
 # Handler Setup
 # ─────────────────────────────────────────────────────────────
 # Setup handlers list
+
+
 handlers = []
+
 
 # Console handler
 console_handler = StreamHandler()
@@ -113,8 +128,8 @@ handlers.append(console_handler)
 
 """File size-based or time-based rotation strategy
 Warn if both size and time rotation configs exist.
-Python’s logging.handlers does not natively 
-support combining time- and size-based rotation in a single handler. 
+Python’s logging.handlers does not natively
+support combining time- and size-based rotation in a single handler.
 This is why it is required that the user specifies their desired strategy."""
 if "LOG_ROTATION_SIZE_MB" in os.environ and "LOG_ROTATION_TIME" in os.environ:
     print(
@@ -134,7 +149,7 @@ if rotation_strategy == "SIZE":
 elif rotation_strategy == "TIME":
     when = os.getenv("LOG_ROTATION_TIME", "midnight")
     file_handler = TimedRotatingFileHandler(
-        LOG_FILE, when=when, backupCount=backup_count, encoding = "utf-8"
+        LOG_FILE, when=when, backupCount=backup_count, encoding="utf-8"
     )
 else:
     raise ValueError("LOG_ROTATION_STRATEGY must be either 'SIZE' or 'TIME' ")

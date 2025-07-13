@@ -8,7 +8,7 @@ import os
 from notifications import DiscordWebhookHandler
 
 from dotenv import load_dotenv
-load_dotenv() # Loads variables from .env into os.environment
+load_dotenv()  # Loads variables from .env into os.environment
 
 
 # === Logger Setup ===

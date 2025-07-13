@@ -10,7 +10,7 @@ class DiscordWebhookHandler(logging.Handler):
     """This is a custom logging handler, that will send log records to
     Discord server using the specified webhook."""
 
-    def __init__(self, webhook_url,level=logging.ERROR, timeout = 5):
+    def __init__(self, webhook_url, level=logging.ERROR, timeout=5):
         super().__init__()
         # This url is where the discord messages will be sent to.
         self.webhook_url = webhook_url

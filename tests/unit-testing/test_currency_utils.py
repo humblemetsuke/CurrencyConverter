@@ -1,8 +1,12 @@
 """unittest is Python's in-built unit testing library.
-patch is used mock/replace portions of the code during tests, such as API calls.
-This simulates actual API calls with dummy data, preventing API call usage.
-requests.exceptions is used to simulate network errors that may arise.
-from the file currency_utils.py, we import convert_currency and get_exchange_rate.
+patch is used mock/replace portions of the code during tests,
+such as API calls.
+This simulates actual API calls with dummy data,
+preventing API call usage.
+requests.exceptions is used to simulate
+network errors that may arise.
+from the file currency_utils.py,
+we import convert_currency and get_exchange_rate.
 Two test classes are formed, one for each of our
 functions imported from currency_utils. """
 
@@ -13,7 +17,7 @@ from currency_utils import convert_currency, get_exchange_rate
 
 """Creates test class, inheriting from unittest, that will test the
 get_exchange_rate function from our currency_utils file.
-It inherits from unittest.TestCase, which provides test runner features 
+It inherits from unittest.TestCase, which provides test runner features
 and assertion methods."""
 
 """A decorator replacing the requests.get inside the currency_utils
@@ -34,7 +38,8 @@ class TestGetExchangeRate(unittest.TestCase):
         }
         mock_get.return_value.raise_for_status.return_value = None
         rate = get_exchange_rate("fake_api_key", "USD", "EUR")
-        # Calls the real get_exchange_rate function with a dummy API key and currencies,
+        # Calls the real get_exchange_rate function with a
+        # dummy API key and currencies,
         # but since requests.get is mocked, no real API call happens.
         self.assertEqual(rate, 1.25)
 
@@ -69,7 +74,8 @@ class TestGetExchangeRate(unittest.TestCase):
         self.assertIsNone(rate)
 
     def test_network_error(self, mock_get):
-        mock_get.side_effect = requests.exceptions.RequestException("Network failure")
+        mock_get.side_effect = (
+            requests.exceptions.RequestException("Network failure"))
         rate = get_exchange_rate("fake_api_key", "USD", "EUR")
         self.assertIsNone(rate)
 
@@ -92,7 +98,8 @@ class TestConvertCurrency(unittest.TestCase):
         result = convert_currency("fake_api_key", -100, "USD", "EUR")
         self.assertEqual(result, -150)
 
-    # Used to test excessively large numbers entered, as part of boundary testing.
+    # Used to test excessively large numbers entered,
+    # as part of boundary testing.
     def test_large_amount(self, mock_get_rate):
         mock_get_rate.return_value = 1.2
         large_amount = 10 ** 9

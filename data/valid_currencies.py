@@ -1,4 +1,3 @@
-
 from parse_currencies_from_csv import generate_currency_dictionary
 
 
@@ -10,4 +9,3 @@ valid_currencies is a dictionary where keys are the name of the currency,
 the values are the 3 lettered currency codes. """
 
 valid_currencies_dict = generate_currency_dictionary()
-
