@@ -91,14 +91,17 @@ def get_discord_handler(
     Attempts to create and return a DiscordWebhookHandler for error logging.
     Returns None if the handler is unavailable or misconfigured.
     """
-    if not webhook_url or len(webhook_url) < 60 or not webhook_url.startswith("https://"):
-        print("⚠️ Invalid or missing DISCORD_WEBHOOK_URL. Skipping Discord logging.")
+    if (not webhook_url or len(webhook_url) < 60 or not
+    webhook_url.startswith("https://")):
+        print("⚠️ Invalid or missing DISCORD_WEBHOOK_URL. "
+              "Skipping Discord logging.")
         return None
 
     try:
         from notifications import DiscordWebhookHandler
     except ImportError:
-        print("🔕 DiscordWebhookHandler not available. Skipping Discord logging.")
+        print("🔕 DiscordWebhookHandler not available. "
+              "Skipping Discord logging.")
         return None
 
     try:
@@ -120,14 +123,16 @@ def get_discord_handler(
 if "LOG_ROTATION_SIZE_MB" in os.environ and "LOG_ROTATION_TIME" in os.environ:
     print(
         "⚠️ Both LOG_ROTATION_SIZE_MB and LOG_ROTATION_TIME are "
-        "set in the environment. Only one will be used based on LOG_ROTATION_STRATEGY."
+        "set in the environment. Only one will be used "
+        "based on LOG_ROTATION_STRATEGY."
     )
 
 VALID_ROTATION_STRATEGIES = {"SIZE", "TIME"}
 rotation_strategy = (os.getenv("LOG_ROTATION_STRATEGY") or "SIZE").upper()
 
 if rotation_strategy not in VALID_ROTATION_STRATEGIES:
-    print(f"⚠️ Invalid LOG_ROTATION_STRATEGY '{rotation_strategy}', defaulting to 'SIZE'.")
+    print(f"⚠️ Invalid LOG_ROTATION_STRATEGY '{rotation_strategy}', "
+          f"defaulting to 'SIZE'.")
     rotation_strategy = "SIZE"
 
 backup_count = get_env_int("LOG_BACKUP_COUNT", 5)
