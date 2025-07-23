@@ -1,8 +1,6 @@
 from data.valid_currencies import valid_currencies_dict
-from logger_setup import setup_logger
+from modular_logger.root_logger import logger
 from typing import Optional
-
-logger = setup_logger()
 
 
 def is_valid_currency(code: str) -> bool:

@@ -1,8 +1,7 @@
 import logging
 import requests
 from requests.exceptions import RequestException
-logger = logging.getLogger(__name__)
-
+from modular_logger.root_logger import logger
 
 def get_exchange_rate(api_key: str, from_currency: str, to_currency: str) -> float |None:
     if not api_key or not from_currency or not to_currency:

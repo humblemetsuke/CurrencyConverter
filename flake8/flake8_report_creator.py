@@ -20,7 +20,7 @@ logger = setup_logger()
 
 # path argument is optional, with the default being "." which is the current
 # directory.
-def run_flake8_report(path=".") -> Path:
+def run_flake8(path=".") -> Path:
 
     # gets the current date and time
     # this ensures that there is duplication of the generated files.

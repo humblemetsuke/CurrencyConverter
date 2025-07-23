@@ -1,13 +1,12 @@
 from config import API_KEY
 from currency_utils import convert_currency
-from logger_setup import setup_logger
+from modular_logger.root_logger import logger
 from validators import get_currency_input, get_valid_amount
 import requests
 import time
 import sys
 from typing import Optional, Callable
 
-logger = setup_logger()
 
 
 def main(max_retries: int = 3) -> None:
@@ -44,7 +43,8 @@ def main(max_retries: int = 3) -> None:
             handle_retry()
             continue
 
-        to_currency: Optional[str] = get_currency_input("To currency code (e.g. GBP or "
+        to_currency: Optional[str] = get_currency_input("To currency code "
+                                                        "(e.g. GBP or "
                                          "'q' to quit: ")
         if to_currency.casefold() == 'q':
             quit_program()
@@ -54,21 +54,28 @@ def main(max_retries: int = 3) -> None:
             continue
 
         try:
-            converted: Optional[float] = convert_currency(API_KEY, amount, from_currency, to_currency)
+            converted: Optional[float] = (
+                convert_currency(API_KEY, amount,
+                                 from_currency,
+                                 to_currency))
         except requests.exceptions.Timeout:
-            print("❌ Request timed out. Please check your internet connection and try again.")
+            print("❌ Request timed out. "
+                  "Please check your internet connection and try again.")
             handle_retry()
             continue
         except requests.exceptions.ConnectionError:
-            print("❌ Connection error. Please check your network and try again.")
+            print("❌ Connection error. "
+                  "Please check your network and try again.")
             handle_retry()
             continue
         except requests.exceptions.HTTPError as http_err:
             status = http_err.response.status_code
             if status == 401:
-                print("❌ Unauthorized: Invalid API key. Please check your API key.")
+                print("❌ Unauthorized: Invalid API key. "
+                      "Please check your API key.")
             elif status == 429:
-                print("⚠️ Rate limit exceeded. Please wait before making more requests.")
+                print("⚠️ Rate limit exceeded. "
+                      "Please wait before making more requests.")
             else:
                 print(f"❌ HTTP error {status}: {http_err.response.reason}")
             logger.error(f"HTTP {status} error during conversion.")
@@ -86,24 +93,29 @@ def main(max_retries: int = 3) -> None:
             continue
         else:
             if converted is not None:
-                print(f"\n💱 {amount:.2f} {from_currency} = {converted:.2f} {to_currency}")
+                print(f"\n💱 {amount:.2f} {from_currency} "
+                      f"= {converted:.2f} {to_currency}")
                 logger.info(
                     f"Conversion: {amount:.2f} {from_currency} "
                     f"→ {converted:.2f} {to_currency}"
                 )
             else:
-                print("⚠️ Conversion failed. Please check your API key or currency codes.")
+                print("⚠️ Conversion failed. "
+                      "Please check your API key or currency codes.")
             retries = 0  # reset retries on success
 
-        retry: Optional[str] = input("\nTry another conversion? (y/n): ").strip().lower()
+        retry: Optional[str] = (input("\nTry another conversion? (y/n): ")
+                                .strip().lower())
         while retry not in ('y', 'n'):
-            retry = input("Please enter 'y' for yes or 'n' for no: ").strip().lower()
+            retry = (input("Please enter 'y' for yes or 'n' for no: ")
+                     .strip().lower())
 
         if retry != 'y':
             quit_program()
 
     else:
-        print("❌ Maximum retries reached. Exiting program.")
+        print("❌ Maximum retries reached. "
+              "Exiting program.")
 
 if __name__ == "__main__":
     main()
