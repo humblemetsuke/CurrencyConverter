@@ -1,8 +1,8 @@
 """Optional logging handlers, including Discord webhook handler."""
 
 import logging
-from config import DISCORD_WEBHOOK_URL
-from formatters import file_formatter
+from modular_logger.config import DISCORD_WEBHOOK_URL
+from modular_logger.formatters import file_formatter
 
 
 def get_discord_handler(

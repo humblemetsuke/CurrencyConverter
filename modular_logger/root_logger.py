@@ -3,9 +3,9 @@
 import logging
 from logging import StreamHandler
 from logging.handlers import RotatingFileHandler, TimedRotatingFileHandler
-from config import LOG_LEVEL, LOG_FILE, get_env_int
-from formatters import color_formatter, file_formatter
-from handlers import get_discord_handler
+from modular_logger.config import LOG_LEVEL, LOG_FILE, get_env_int
+from modular_logger.formatters import color_formatter, file_formatter
+from modular_logger.handlers import get_discord_handler
 import os
 
 # Here, the user will choose between time and size rotations strategies.

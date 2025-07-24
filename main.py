@@ -1,4 +1,4 @@
-from config import API_KEY
+from modular_logger.config import API_KEY
 from currency_utils import convert_currency
 from modular_logger.root_logger import logger
 from validators import get_currency_input, get_valid_amount
@@ -6,7 +6,6 @@ import requests
 import time
 import sys
 from typing import Optional, Callable
-
 
 
 def main(max_retries: int = 3) -> None:

@@ -1,9 +1,16 @@
 import logging
 import requests
+import os
+from config import API_KEY, EXCHANGE_RATE_BASE_URL
 from requests.exceptions import RequestException
 from modular_logger.root_logger import logger
 
-def get_exchange_rate(api_key: str, from_currency: str, to_currency: str) -> float |None:
+
+
+
+def get_exchange_rate(from_currency: str,
+                      to_currency: str) -> float |None:
+    api_key = API_KEY
     if not api_key or not from_currency or not to_currency:
         logger.error("One or more of the required parameters is missing "
                      "for exchange rate lookup.")
@@ -18,8 +25,8 @@ def get_exchange_rate(api_key: str, from_currency: str, to_currency: str) -> flo
         logger.error(f"Invalid currency codes: {from_currency}, {to_currency}. "
                      "Expected 3-letter alphabetic ISO codes.")
         return None
-    url = f"https://v6.exchangerate-api.com/v6/{api_key}/pair/{from_currency}/{to_currency}"
-    logger.info(f"Fetching exchange rate: {from_currency} -> {to_currency}")
+    url = f"{EXCHANGE_RATE_BASE_URL}/{api_key}/pair/{from_currency}/{to_currency}"
+    logger.info(f"Fetching exchange rate: {from_currency} -> {to_currency} from {url}")
 
     try:
         response = requests.get(url, timeout=5)
@@ -39,13 +46,13 @@ def get_exchange_rate(api_key: str, from_currency: str, to_currency: str) -> flo
         return None
 
 
-def convert_currency(api_key: str, amount: float, from_currency: str,
+def convert_currency(amount: float, from_currency: str,
                      to_currency: str) -> float | None:
     if not isinstance(amount, (int, float)) or amount <= 0:
         logger.error(f"Invalid amount for conversion: {amount}")
         return None
     logger.debug(f"Converting {amount} {from_currency} to {to_currency}")
-    rate = get_exchange_rate(api_key, from_currency, to_currency)
+    rate = get_exchange_rate(from_currency, to_currency)
 
     if rate is not None:
         converted = amount * rate
