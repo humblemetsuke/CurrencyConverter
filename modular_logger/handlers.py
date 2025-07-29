@@ -9,6 +9,15 @@ def get_discord_handler(
     webhook_url: str = DISCORD_WEBHOOK_URL,
     log_level: int = logging.ERROR,
 ) -> logging.Handler | None:
+    """Returns a configured DiscordWebhookHandler if available and valid.
+    Falls back to None if the webhook URL is invalid, missing, or if
+    the handler cannot be imported or initialized.
+    Parameters:
+    - webhook_url (str): The Discord webhook URL.
+    - log_level (int): Logging level for the handler.
+    Returns:
+    - logging.Handler | None: Configured handler or None.
+"""
 
     # if the webhook is invalid or missing, skip.
     if not webhook_url or not webhook_url.startswith("https://"):

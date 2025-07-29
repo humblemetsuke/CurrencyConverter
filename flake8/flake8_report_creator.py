@@ -12,9 +12,8 @@ strings."""
 import subprocess
 from datetime import datetime
 from pathlib import Path
-from logger_setup import setup_logger
 from constants import FLAKE8_REPORTS_DIR
-logger = setup_logger()
+
 
 # --- Run flake8 and create report, storing to specified directory ---
 

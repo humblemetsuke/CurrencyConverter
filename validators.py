@@ -10,7 +10,8 @@ def is_valid_currency(code: str) -> bool:
             and code in valid_currencies_dict.values())
 
 
-def exit_on_interrupt(message: str = "Input cancelled by user. Exiting.", code: int = 1):
+def exit_on_interrupt(message: str = "Input cancelled by user. Exiting.",
+                      code: int = 1):
     print(f"\n❗ {message}")
     exit(code)
 
@@ -39,4 +40,5 @@ def get_currency_input(label: str) -> str:
         except KeyboardInterrupt:
             exit_on_interrupt()
         except EOFError:
-            exit_on_interrupt("No input detected (EOF). Exiting...", code=1)
+            exit_on_interrupt("No input detected (EOF). "
+                              "Exiting...", code=1)

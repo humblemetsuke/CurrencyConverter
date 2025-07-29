@@ -5,7 +5,7 @@ from validators import get_currency_input, get_valid_amount
 import requests
 import time
 import sys
-from typing import Optional, Callable
+from typing import Optional
 
 
 def main(max_retries: int = 3) -> None:
@@ -33,8 +33,9 @@ def main(max_retries: int = 3) -> None:
             handle_retry()
             continue
 
-        from_currency: Optional[str] = get_currency_input("From currency code (e.g. USD) "
-                                           "or 'q' to quit: ")
+        from_currency: Optional[str] = get_currency_input(
+            "From currency code (e.g. USD) "
+            "or 'q' to quit: ")
         if from_currency.casefold() == 'q':
             quit_program()
         if not from_currency:
@@ -44,7 +45,7 @@ def main(max_retries: int = 3) -> None:
 
         to_currency: Optional[str] = get_currency_input("To currency code "
                                                         "(e.g. GBP or "
-                                         "'q' to quit: ")
+                                                        "'q' to quit: ")
         if to_currency.casefold() == 'q':
             quit_program()
         if not to_currency:
@@ -115,6 +116,7 @@ def main(max_retries: int = 3) -> None:
     else:
         print("❌ Maximum retries reached. "
               "Exiting program.")
+
 
 if __name__ == "__main__":
     main()

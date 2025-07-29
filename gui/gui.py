@@ -28,7 +28,7 @@ from PyQt6.QtGui import QDoubleValidator
 from currency_utils import convert_currency  # imports custom logic of functions from currency_utils
 from config import API_KEY
 from PyQt6.QtGui import QCursor
-from valid_currencies import valid_currencies_dict
+from data.valid_currencies import valid_currencies_dict
 # used to fetch from tuple of currencies to populate
 # the dropdown menu in the GUI.
 
