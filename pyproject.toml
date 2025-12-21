@@ -7,9 +7,7 @@ authors = [
 ]
 readme = "README.md"
 requires-python = ">=3.14"
-dependencies = [
-]
-
+dependencies = []
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
@@ -20,4 +18,12 @@ dev = [
     "sphinx (<9)",
     "myst-parser (>=4.0.1,<5.0.0)",
     "sphinxcontrib-mermaid (>=1.2.3,<2.0.0)"
+]
+
+[tool.semantic_release]
+version_source = "tag"
+upload_to_pypi = false
+branch = "main"
+
+
 ]
