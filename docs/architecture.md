@@ -1,0 +1,13 @@
+
+
+flowchart TD
+%% Start of diagram
+%% Flowchart is used to denote a flowchart
+%% TD is used for Top Down
+%% User interacts with the system
+
+A[User Input] --> B[CurrencyConverter Core]
+B --> C[API Fetch]
+C --> D[Conversion Logic]
+D --> E[Result Output]
+

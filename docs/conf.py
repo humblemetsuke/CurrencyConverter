@@ -15,6 +15,8 @@ release = "0.1.0"
 extensions = [
     "sphinx.ext.autodoc", # Used to pull in docstrings automatically
     "sphinx.ext.viewcode", # links to source code in HTML
+    "myst_parser," # enables Markdown
+    "sphinxcontrib.mermaid" # enables Mermaid
 ]
 
 templates_path = ["_templates"]
