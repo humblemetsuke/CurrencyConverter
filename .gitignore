@@ -1,0 +1,74 @@
+# ===============================
+# Python
+# ===============================
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+*.manifest
+*.spec
+
+# ===============================
+# Virtual environments
+# ===============================
+venv/
+.env/
+.env.*
+
+# ===============================
+# Logs and database
+# ===============================
+*.log
+*.sqlite3
+*.db
+*.db-journal
+
+# ===============================
+# IDEs / Editors
+# ===============================
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# ===============================
+# OS files
+# ===============================
+.DS_Store
+Thumbs.db
+*.bak
+*.swp
+
+# ===============================
+# Sphinx / Documentation
+# ===============================
+docs/_build/
+docs/generated/
+
+# ===============================
+# Testing / Coverage
+# ===============================
+.coverage
+htmlcov/
+.tox/
+.pytest_cache/
+nosetests.xml
+coverage.xml
+
+# ===============================
+# CI/CD
+# ===============================
+# GitHub Actions
+.github/workflows/*.yml
+
+# ===============================
+# Misc
+# ===============================
+*.pem
+*.key
+*.crt
