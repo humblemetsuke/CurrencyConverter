@@ -17,4 +17,11 @@ repos:
     hooks:
       - id: flake8
 
-
+  # Local hook to prevent committing any .env files.
+  - repo: local
+    hooks:
+      - id: block-env-files
+        name: Block env files
+        language: fail
+        entry: "Blocking any .env and related files"
+        files: (^|/)\.env($|\.)
