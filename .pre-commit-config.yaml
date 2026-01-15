@@ -1,15 +1,20 @@
 repos:
+  # Black: auto-formats Python code for consistent style
   - repo: https://github.com/psf/black
     rev: 24.10.0
     hooks:
       - id: black
 
+  # isort: automatically sorts import statements for consistency
   - repo: https://github.com/pre-commit/mirrors-isort
     rev: v5.10.1
     hooks:
       - id: isort
 
+  # Flake8: lints Python code for style, errors, and complexity
   - repo: https://github.com/PyCQA/flake8
     rev: 7.3.0
     hooks:
       - id: flake8
+
+
