@@ -24,4 +24,4 @@ repos:
         name: Block env files
         language: fail
         entry: "Blocking any .env and related files"
-        files: (^|/)\.env($|\.)
+        files: (^|/)\.env(\.|$)
