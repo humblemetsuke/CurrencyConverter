@@ -48,8 +48,15 @@ repos:
     hooks:
       - id: mypy
 
-  # pylint: # Pylint checks Python code for bugs, style issues (PEP 8)
+  # pylint: Pylint checks Python code for bugs, style issues (PEP 8)
   - repo: https://github.com/pre-commit/mirrors-pylint
     rev: v2.7.4
     hooks:
       - id: pylint
+
+  # bandit: Analyzes code for common security vulnerabilities.
+  - repo: https://github.com/PyCQA/bandit
+    rev: 1.9.3
+    hooks:
+      - id: bandit
+        args: ["-r", "."] # recursively searches directories and subdirectories.
