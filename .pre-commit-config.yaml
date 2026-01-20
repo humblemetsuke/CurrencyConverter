@@ -47,3 +47,9 @@ repos:
     rev: v1.19.1
     hooks:
       - id: mypy
+
+  # pylint: # Pylint checks Python code for bugs, style issues (PEP 8)
+  - repo: https://github.com/pre-commit/mirrors-pylint
+    rev: v2.7.4
+    hooks:
+      - id: pylint
