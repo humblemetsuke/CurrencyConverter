@@ -17,7 +17,8 @@ build-backend = "poetry.core.masonry.api"
 dev = [
     "sphinx (<9)",
     "myst-parser (>=4.0.1,<5.0.0)",
-    "sphinxcontrib-mermaid (>=1.2.3,<2.0.0)"
+    "sphinxcontrib-mermaid (>=1.2.3,<2.0.0)",
+    "pre-commit (>=4.5.1,<5.0.0)"
 ]
 
 [tool.semantic_release]
@@ -25,5 +26,3 @@ version_source = "tag"
 upload_to_pypi = false
 branch = "main"
 
-
-]

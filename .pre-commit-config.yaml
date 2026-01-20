@@ -21,7 +21,8 @@ repos:
   - repo: local
     hooks:
       - id: block-env-files
-        name: Block env files
-        language: fail
-        entry: "Blocking any .env and related files"
-        files: (^|/)\.env(\.|$)
+        name: Block .env files
+        language: python
+        entry: "hooks/block_env.py"
+        files: (^|/)\.env(\.[a-zA-Z0-9_-]+|$)
+
