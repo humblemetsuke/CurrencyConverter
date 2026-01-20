@@ -14,6 +14,12 @@ repos:
       - id: check-yaml
       - id: check-added-large-files
 
+  # formats yml/yaml/json/js files to keep them consistent
+  - repo: https://github.com/pre-commit/mirrors-prettier
+    rev: v3.0.1
+    hooks:
+      - id: prettier
+        files: \.(json|yml|yaml|md|js|ts)$
 
   # isort: automatically sorts import statements for consistency
   - repo: https://github.com/pre-commit/mirrors-isort
