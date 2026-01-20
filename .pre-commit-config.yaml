@@ -41,3 +41,9 @@ repos:
         language: python
         entry: "hooks/block_env.py"
         files: (^|/)\.env(\.[a-zA-Z0-9_-]+|$)
+
+  # mypy: static type checker to catch type errors before runtime.
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.19.1
+    hooks:
+      - id: mypy
