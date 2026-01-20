@@ -60,3 +60,18 @@ repos:
     hooks:
       - id: bandit
         args: ["-r", "."] # recursively searches directories and subdirectories.
+
+  # local hook to ensure Sphinx docs build correctly
+  - repo: local
+    hooks:
+      - id: build-sphinx
+        name: "Build Sphinx docs"
+        # Runs Sphinx via Python:
+        # -b html → build HTML
+        # docs → source folder
+        # docs/_build/html → output folder
+        # this ensures full cross-compatibility, removing the need for bash.
+        entry: poetry run python -m sphinx -b html docs docs/_build/html || exit 1
+        language: system
+        # Trigger only for .rst and .md files
+        files: \.(rst|md)$
