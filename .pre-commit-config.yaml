@@ -83,7 +83,7 @@ repos:
         # Checks all Python files for cyclomatic complexity(CC).
         # Fails if any function exceeds CC grade C (11–20), which is industry-acceptable maximum.
         # Shows per-function and average per-file scores.
-        entry: radon cc -s -a -nc . --fail C
+        entry: poetry run radon cc -s -a -nc . --fail C
         language: system
         types: [python]
 
