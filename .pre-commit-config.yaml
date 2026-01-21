@@ -1,11 +1,7 @@
 repos:
-  # Black: auto-formats Python code for consistent style
-  - repo: https://github.com/psf/black
-    rev: 24.10.0
-    hooks:
-      - id: black
-
-  # quick sanity checks: if these fail, whole file isn't executed.
+  # -------------------------
+  # Quick sanity checks (fast, fail early)
+  # -------------------------
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v5.0.0
     hooks:
@@ -14,12 +10,13 @@ repos:
       - id: check-yaml
       - id: check-added-large-files
 
-  # formats yml/yaml/json/js files to keep them consistent
-  - repo: https://github.com/pre-commit/mirrors-prettier
-    rev: v3.0.1
+  # -------------------------
+  # Code formatting (fast, consistent)
+  # -------------------------
+  - repo: https://github.com/psf/black
+    rev: 24.10.0
     hooks:
-      - id: prettier
-        files: \.(json|yml|yaml|md|js|ts)$
+      - id: black
 
   # isort: automatically sorts import statements for consistency
   - repo: https://github.com/pre-commit/mirrors-isort
@@ -27,13 +24,68 @@ repos:
     hooks:
       - id: isort
 
+  # formats yml/yaml/json/js files to keep them consistent
+  - repo: https://github.com/pre-commit/mirrors-prettier
+    rev: v3.0.1
+    hooks:
+      - id: prettier
+        files: \.(json|yml|yaml|md|js|ts)$
+
+  # -------------------------
+  # Lightweight linting & type checking
+  # -------------------------
+
   # Flake8: lints Python code for style, errors, and complexity
   - repo: https://github.com/PyCQA/flake8
     rev: 7.3.0
     hooks:
       - id: flake8
 
-  # Local hook to prevent committing any .env files.
+  # mypy: static type checker to catch type errors before runtime.
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.19.1
+    hooks:
+      - id: mypy
+
+  # -------------------------
+  # Heavier analysis (more expensive)
+  # -------------------------
+
+  # pylint: Pylint checks Python code for bugs, style issues (PEP 8)
+  - repo: https://github.com/pre-commit/mirrors-pylint
+    rev: v2.7.4
+    hooks:
+      - id: pylint
+
+  - repo: local
+    hooks:
+      - id: radon-cc
+        name: Check Cyclomatic Complexity with Radon
+        # Checks all Python files for cyclomatic complexity(CC).
+        # Fails if any function exceeds CC grade C (11–20), which is industry-acceptable maximum.
+        # Shows per-function and average per-file scores.
+        entry: poetry run radon cc -s -a -nc . --fail C
+        language: system
+        types: [python]
+
+      - id: vulture
+        name: Detect unused code with vulture
+        # Use Poetry to run the command in the virtual environment
+        entry: poetry run vulture . --min-confidence 60
+        language: system
+        types: [python]
+
+  # bandit: Analyzes code for common security vulnerabilities.
+  - repo: https://github.com/PyCQA/bandit
+    rev: 1.9.3
+    hooks:
+      - id: bandit
+        args: ["-r", "."]
+        # Security scan for Python code
+
+  # -------------------------
+  # Local environment & docs
+  # -------------------------
   - repo: local
     hooks:
       - id: block-env-files
@@ -42,67 +94,14 @@ repos:
         entry: "hooks/block_env.py"
         files: (^|/)\.env(\.[a-zA-Z0-9_-]+|$)
 
-  # mypy: static type checker to catch type errors before runtime.
-  - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v1.19.1
-    hooks:
-      - id: mypy
-
-  # pylint: Pylint checks Python code for bugs, style issues (PEP 8)
-  - repo: https://github.com/pre-commit/mirrors-pylint
-    rev: v2.7.4
-    hooks:
-      - id: pylint
-
-  # bandit: Analyzes code for common security vulnerabilities.
-  - repo: https://github.com/PyCQA/bandit
-    rev: 1.9.3
-    hooks:
-      - id: bandit
-        args: ["-r", "."] # recursively searches directories and subdirectories.
-
-  # local hook to ensure Sphinx docs build correctly
-  - repo: local
-    hooks:
       - id: build-sphinx
-        name: "Build Sphinx docs"
-        # Runs Sphinx via Python:
-        # -b html → build HTML
-        # docs → source folder
-        # docs/_build/html → output folder
-        # this ensures full cross-compatibility, removing the need for bash.
+        name: Build Sphinx docs
         entry: poetry run python -m sphinx -b html docs docs/_build/html || exit 1
         language: system
-        # Trigger only for .rst and .md files
         files: \.(rst|md)$
 
-  - repo: local
-    hooks:
-      - id: radon-cc
-        name: "Check Cyclomatic Complexity with Radon"
-        # Checks all Python files for cyclomatic complexity(CC).
-        # Fails if any function exceeds CC grade C (11–20), which is industry-acceptable maximum.
-        # Shows per-function and average per-file scores.
-        entry: poetry run radon cc -s -a -nc . --fail C
-        language: system
-        types: [python]
-
-  - repo: local
-    hooks:
-      - id: vulture
-        name: "Detect unused code with vulture"
-        # Use Poetry to run the command in the virtual environment
-        entry: poetry run vulture . --min-confidence 60
-        language: system
-        types: [python]
-
-  - repo: local
-    hooks:
       - id: commitlint
-        name: "Lint commit messages"
-        # Ensures commit messages follow Conventional Commits
-        # Requires: `npm install --save-dev @commitlint/cli @commitlint/config-conventional`
-        # and a `commitlint.config.js` in the project root
+        name: Lint commit messages
         entry: npx commitlint --edit $1
         language: system
         stages: [commit-msg]
