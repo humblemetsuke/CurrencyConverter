@@ -86,3 +86,12 @@ repos:
         entry: radon cc -s -a -nc . --fail C
         language: system
         types: [python]
+
+  - repo: local
+    hooks:
+      - id: vulture
+        name: "Detect unused code with vulture"
+        # Use Poetry to run the command in the virtual environment
+        entry: poetry run vulture . --min-confidence 60
+        language: system
+        types: [python]
