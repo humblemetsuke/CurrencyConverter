@@ -95,3 +95,14 @@ repos:
         entry: poetry run vulture . --min-confidence 60
         language: system
         types: [python]
+
+  - repo: local
+    hooks:
+      - id: commitlint
+        name: "Lint commit messages"
+        # Ensures commit messages follow Conventional Commits
+        # Requires: `npm install --save-dev @commitlint/cli @commitlint/config-conventional`
+        # and a `commitlint.config.js` in the project root
+        entry: npx commitlint --edit $1
+        language: system
+        stages: [commit-msg]
