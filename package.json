@@ -1,0 +1,30 @@
+{
+  "_comment_project": "CurrencyConverter Python project using Poetry, Semantic Release, and commitlint.",
+  "_comment_scripts": "Scripts to run Semantic Release easily.",
+  "scripts": {
+    "_comment_release": "Runs full Semantic Release: updates version, changelog, commits, and optionally publishes to PyPI.",
+    "release": "semantic-release",
+    "_comment_release_dry": "Simulates Semantic Release without making any changes; good for testing configuration.",
+    "release:dry": "semantic-release --dry-run"
+  },
+  "_comment_devDependencies": "Development-only packages used for automation and commit linting.",
+  "devDependencies": {
+    "_comment_commitlint": "Enforces Conventional Commit messages to make Semantic Release work reliably.",
+    "@commitlint/cli": "^20.3.1",
+    "@commitlint/config-conventional": "^20.3.1",
+    "_comment_mermaid": "CLI for generating diagrams from Mermaid syntax; optional, for documentation visuals.",
+    "@mermaid-js/mermaid-cli": "^11.12.0",
+    "_comment_semantic_release_core": "Core Semantic Release engine.",
+    "semantic-release": "^24.2.9",
+    "_comment_commit_analyzer": "Analyzes commit messages to determine next version (patch/minor/major).",
+    "@semantic-release/commit-analyzer": "^13.0.1",
+    "_comment_release_notes_generator": "Generates the notes for changelog from commit messages.",
+    "@semantic-release/release-notes-generator": "^14.1.0",
+    "_comment_changelog": "Writes/updates CHANGELOG.md.",
+    "@semantic-release/changelog": "^6.0.3",
+    "_comment_exec": "Runs shell commands: here used to update Poetry version and publish to PyPI.",
+    "@semantic-release/exec": "^7.1.0",
+    "_comment_git": "Commits updated pyproject.toml and changelog back to Git.",
+    "@semantic-release/git": "^10.0.1"
+  }
+}
